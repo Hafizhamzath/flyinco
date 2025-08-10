@@ -1,5 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import "react-toastify/dist/ReactToastify.css";
+
 
 // Admin components
 import AdminLayout from './components/admin/Layout';

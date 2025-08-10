@@ -131,110 +131,127 @@ export default function VisaApplicationForm() {
     defaultValues: {},
   });
 
-  async function onSubmit(data) {
-    console.log("Form submission triggered", data);
-    const errors = form.formState.errors;
-    if (Object.keys(errors).length > 0) {
-      console.error("Validation errors:", errors);
-      toast({
-        title: "Validation Error",
-        description: "Please fill out all required fields correctly.",
-        variant: "destructive",
-      });
-      return;
-    }
 
-    const formData = new FormData();
-    formData.append("firstName", data.firstName);
-    formData.append("lastName", data.lastName);
-    formData.append("dateOfBirth", data.dateOfBirth.toISOString());
-    formData.append("gender", data.gender);
-    formData.append("nationality", data.nationality);
-    formData.append("maritalStatus", data.maritalStatus);
-    formData.append("passportNumber", data.passportNumber);
-    formData.append("passportIssuedAt", data.passportIssuedAt);
-    formData.append("passportIssuedOn", data.passportIssuedOn.toISOString());
-    formData.append("passportExpiresOn", data.passportExpiresOn.toISOString());
-    if (data.residencyCountry) formData.append("residencyCountry", data.residencyCountry);
-    if (data.residencyCity) formData.append("residencyCity", data.residencyCity);
-    if (data.residencyAddress) formData.append("residencyAddress", data.residencyAddress);
-    if (data.residencyPostal) formData.append("residencyPostal", data.residencyPostal);
-    formData.append("email", data.email);
-    formData.append("phoneNumber", data.phoneNumber);
-    if (data.emergencyContact) formData.append("emergencyContact", data.emergencyContact);
-    formData.append("travelPurpose", data.travelPurpose);
-    formData.append("travelDate", data.travelDate.toISOString());
-    formData.append("travelDuration", data.travelDuration);
-    formData.append("visaType", data.visaType);
-    formData.append("destinationCountry", data.destinationCountry);
-    formData.append("employmentStatus", data.employmentStatus);
-    if (data.employerName) formData.append("employerName", data.employerName);
-    if (data.jobTitle) formData.append("jobTitle", data.jobTitle);
-    formData.append("workAddress", data.workAddress);
-    if (data.passportDocument) formData.append("passportDocument", data.passportDocument);
-    if (data.photoDocument) formData.append("photoDocument", data.photoDocument);
-    if (data.itineraryDocument) formData.append("itineraryDocument", data.itineraryDocument);
-    if (data.employmentLetter) formData.append("employmentLetter", data.employmentLetter);
+async function onSubmit(data) {
+  console.log("Form submission triggered", data);
 
-    try {
-      console.log("Sending data to backend...");
-      const response = await fetch('https://flyinco.onrender.com/api/visas', {
-        method: 'POST',
-        body: formData,
-      });
-      console.log("Response status:", response.status);
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorText}`);
-      }
-
-      const result = await response.json();
-      console.log("Backend response:", result);
-      toast({
-        title: "Application Approved",
-        description: "Your visa application has been successfully submitted and approved.",
-      });
-      form.reset({
-        firstName: "",
-        lastName: "",
-        dateOfBirth: undefined,
-        gender: "",
-        nationality: "",
-        maritalStatus: "",
-        passportNumber: "",
-        passportIssuedAt: "",
-        passportIssuedOn: undefined,
-        passportExpiresOn: undefined,
-        residencyCountry: "",
-        residencyCity: "",
-        residencyAddress: "",
-        residencyPostal: "",
-        email: "",
-        phoneNumber: "",
-        emergencyContact: "",
-        travelPurpose: "",
-        travelDate: undefined,
-        travelDuration: "",
-        visaType: "",
-        destinationCountry: "",
-        employmentStatus: "",
-        employerName: "",
-        jobTitle: "",
-        workAddress: "",
-        passportDocument: undefined,
-        photoDocument: undefined,
-        itineraryDocument: undefined,
-        employmentLetter: undefined,
-      });
-    } catch (error) {
-      console.error("Submission error:", error);
-      toast({
-        title: "Submission Failed",
-        description: error.message || "An error occurred while submitting the form.",
-        variant: "destructive",
-      });
-    }
+  const errors = form.formState.errors;
+  if (Object.keys(errors).length > 0) {
+    console.error("Validation errors:", errors);
+    toast.error("Please fill out all required fields correctly.", {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    });
+    return;
   }
+
+  const formData = new FormData();
+  formData.append("firstName", data.firstName);
+  formData.append("lastName", data.lastName);
+  formData.append("dateOfBirth", data.dateOfBirth.toISOString());
+  formData.append("gender", data.gender);
+  formData.append("nationality", data.nationality);
+  formData.append("maritalStatus", data.maritalStatus);
+  formData.append("passportNumber", data.passportNumber);
+  formData.append("passportIssuedAt", data.passportIssuedAt);
+  formData.append("passportIssuedOn", data.passportIssuedOn.toISOString());
+  formData.append("passportExpiresOn", data.passportExpiresOn.toISOString());
+  if (data.residencyCountry) formData.append("residencyCountry", data.residencyCountry);
+  if (data.residencyCity) formData.append("residencyCity", data.residencyCity);
+  if (data.residencyAddress) formData.append("residencyAddress", data.residencyAddress);
+  if (data.residencyPostal) formData.append("residencyPostal", data.residencyPostal);
+  formData.append("email", data.email);
+  formData.append("phoneNumber", data.phoneNumber);
+  if (data.emergencyContact) formData.append("emergencyContact", data.emergencyContact);
+  formData.append("travelPurpose", data.travelPurpose);
+  formData.append("travelDate", data.travelDate.toISOString());
+  formData.append("travelDuration", data.travelDuration);
+  formData.append("visaType", data.visaType);
+  formData.append("destinationCountry", data.destinationCountry);
+  formData.append("employmentStatus", data.employmentStatus);
+  if (data.employerName) formData.append("employerName", data.employerName);
+  if (data.jobTitle) formData.append("jobTitle", data.jobTitle);
+  formData.append("workAddress", data.workAddress);
+  if (data.passportDocument) formData.append("passportDocument", data.passportDocument);
+  if (data.photoDocument) formData.append("photoDocument", data.photoDocument);
+  if (data.itineraryDocument) formData.append("itineraryDocument", data.itineraryDocument);
+  if (data.employmentLetter) formData.append("employmentLetter", data.employmentLetter);
+
+  try {
+    console.log("Sending data to backend...");
+    const response = await fetch('https://flyinco.onrender.com/api/visas', {
+      method: 'POST',
+      body: formData,
+    });
+    console.log("Response status:", response.status);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorText}`);
+    }
+
+    const result = await response.json();
+    console.log("Backend response:", result);
+
+    toast.success("Your visa application has been successfully submitted and approved!", {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    });
+
+    form.reset({
+      firstName: "",
+      lastName: "",
+      dateOfBirth: undefined,
+      gender: "",
+      nationality: "",
+      maritalStatus: "",
+      passportNumber: "",
+      passportIssuedAt: "",
+      passportIssuedOn: undefined,
+      passportExpiresOn: undefined,
+      residencyCountry: "",
+      residencyCity: "",
+      residencyAddress: "",
+      residencyPostal: "",
+      email: "",
+      phoneNumber: "",
+      emergencyContact: "",
+      travelPurpose: "",
+      travelDate: undefined,
+      travelDuration: "",
+      visaType: "",
+      destinationCountry: "",
+      employmentStatus: "",
+      employerName: "",
+      jobTitle: "",
+      workAddress: "",
+      passportDocument: undefined,
+      photoDocument: undefined,
+      itineraryDocument: undefined,
+      employmentLetter: undefined,
+    });
+
+  } catch (error) {
+    console.error("Submission error:", error);
+    toast.error(error.message || "An error occurred while submitting the form.", {
+      position: "top-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    });
+  }
+}
+
 
   return (
     <Card className="w-full shadow-lg">
