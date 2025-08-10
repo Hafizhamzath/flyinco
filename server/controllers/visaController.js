@@ -7,27 +7,12 @@ exports.createVisa = async (req, res) => {
 
     // Validate required fields
     const requiredFields = [
-      'firstName',
-      'lastName',
-      'dateOfBirth',
-      'gender',
-      'nationality',
-      'maritalStatus',
-      'passportNumber',
-      'passportIssuedAt',
-      'passportIssuedOn',
-      'passportExpiresOn',
-      'email',
-      'phoneNumber',
-      'travelPurpose',
-      'travelDate',
-      'travelDuration',
-      'visaType',
-      'destinationCountry',
-      'employmentStatus',
-      'employerName',
-      'jobTitle',
-      'workAddress',
+      'firstName', 'lastName', 'dateOfBirth', 'gender', 'nationality',
+      'maritalStatus', 'passportNumber', 'passportIssuedAt',
+      'passportIssuedOn', 'passportExpiresOn', 'email', 'phoneNumber',
+      'travelPurpose', 'travelDate', 'travelDuration', 'visaType',
+      'destinationCountry', 'employmentStatus', 'employerName',
+      'jobTitle', 'workAddress'
     ];
     const missingFields = requiredFields.filter((field) => !formData[field]);
     if (missingFields.length > 0) {
@@ -45,8 +30,7 @@ exports.createVisa = async (req, res) => {
       passportDocument: files.passportDocument?.[0]?.path || '',
       photoDocument: files.photoDocument?.[0]?.path || '',
       itineraryDocument: files.itineraryDocument?.[0]?.path || '',
-      employmentLetter: files.employmentLetter?.[0]?.path || '',
-      otherDocuments: files.otherDocuments?.map((file) => file.path) || [],
+      employmentLetter: files.employmentLetter?.[0]?.path || ''
     };
 
     const visaData = {
@@ -56,7 +40,7 @@ exports.createVisa = async (req, res) => {
       passportExpiresOn: new Date(formData.passportExpiresOn),
       travelDate: new Date(formData.travelDate),
       documents,
-      submittedAt: new Date(),
+      submittedAt: new Date()
     };
 
     const newVisa = new Visa(visaData);

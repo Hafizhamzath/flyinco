@@ -1,12 +1,10 @@
-
 const mongoose = require('mongoose');
 
 const documentSchema = new mongoose.Schema({
   passportDocument: { type: String, required: true },
   photoDocument: { type: String, required: true },
   itineraryDocument: { type: String, required: true },
-  employmentLetter: { type: String, required: true },
-  otherDocuments: [{ type: String }],
+  employmentLetter: { type: String, required: true }
 });
 
 const applicationSchema = new mongoose.Schema({
@@ -38,7 +36,7 @@ const applicationSchema = new mongoose.Schema({
   workAddress: { type: String, required: true },
   documents: { type: documentSchema, required: true },
   submittedAt: { type: Date, default: Date.now },
-  status: { type: String, default: 'submitted' },
+  status: { type: String, default: 'submitted' }
 });
 
 module.exports = mongoose.model('Visa', applicationSchema);

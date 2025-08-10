@@ -1,13 +1,12 @@
-// src/components/VisaApplicationForm.jsx
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { format } from "date-fns";
 import { CalendarIcon, Upload, Send } from "lucide-react";
 
-import { cn } from "@/lib/utils"; // Ensure this utility is available or replace with classnames
+import { cn } from "@/lib/utils";
 import { Button } from "../../UI/button";
-import  Calendar  from "../../UI/calendar";
+import Calendar from "../../UI/calendar";
 import {
   Form,
   FormControl,
@@ -89,22 +88,17 @@ const visaApplicationSchema = z.object({
   visaType: z.string().min(1, "Visa type is required."),
   destinationCountry: z.string().min(1, "Destination country is required."),
   employmentStatus: z.string().min(1, "Employment status is required."),
-  employerName: z.string().min(1, "Employer name is required."),
-  jobTitle: z.string().min(1, "Job title is required."),
+  employerName: z.string().optional(),
+  jobTitle: z.string().optional(),
   workAddress: z.string().min(1, "Work address is required."),
   passportDocument: fileSchema,
   photoDocument: imageFileSchema,
   itineraryDocument: fileSchema,
-  employmentLetter: fileSchema,
-  otherDocuments: z.array(fileSchema).optional(),
+  employmentLetter: fileSchema.optional(),
 });
 
 const FileUploadButton = ({ field, label }) => {
-  const fileName = field.value
-    ? Array.isArray(field.value)
-      ? field.value.map((f) => f.name).join(", ")
-      : field.value.name
-    : "No file chosen";
+  const fileName = field.value ? field.value.name : "No file chosen";
   return (
     <FormItem>
       <FormLabel>{label}</FormLabel>
@@ -113,14 +107,7 @@ const FileUploadButton = ({ field, label }) => {
           type="file"
           id={field.name}
           className="hidden"
-          multiple={field.name === "otherDocuments"}
-          onChange={(e) =>
-            field.onChange(
-              field.name === "otherDocuments"
-                ? Array.from(e.target.files)
-                : e.target.files[0]
-            )
-          }
+          onChange={(e) => field.onChange(e.target.files[0])}
           accept={field.name === "photoDocument" ? ".jpg,.jpeg,.png" : ".pdf,.jpg,.jpeg"}
         />
       </FormControl>
@@ -141,90 +128,82 @@ const FileUploadButton = ({ field, label }) => {
 export default function VisaApplicationForm() {
   const form = useForm({
     resolver: zodResolver(visaApplicationSchema),
-    defaultValues: {
-      otherDocuments: [],
-    },
+    defaultValues: {},
   });
 
   async function onSubmit(data) {
-  console.log("Form submission triggered", data);
-  const errors = form.formState.errors;
-  if (Object.keys(errors).length > 0) {
-    console.error("Validation errors:", errors);
-    toast({
-      title: "Validation Error",
-      description: "Please fill out all required fields correctly.",
-      variant: "destructive",
-    });
-    return;
-  }
-
-  const formData = new FormData();
-  // Map frontend fields to backend schema
-  formData.append("firstName", data.firstName);
-  formData.append("lastName", data.lastName);
-  formData.append("dateOfBirth", data.dateOfBirth.toISOString());
-  formData.append("gender", data.gender);
-  formData.append("nationality", data.nationality);
-  formData.append("maritalStatus", data.maritalStatus);
-  formData.append("passportNumber", data.passportNumber);
-  formData.append("passportIssuedAt", data.passportIssuedAt);
-  formData.append("passportIssuedOn", data.passportIssuedOn.toISOString());
-  formData.append("passportExpiresOn", data.passportExpiresOn.toISOString());
-  if (data.residencyCountry) formData.append("residencyCountry", data.residencyCountry);
-  if (data.residencyCity) formData.append("residencyCity", data.residencyCity);
-  if (data.residencyAddress) formData.append("residencyAddress", data.residencyAddress);
-  if (data.residencyPostal) formData.append("residencyPostal", data.residencyPostal);
-  formData.append("email", data.email);
-  formData.append("phoneNumber", data.phoneNumber);
-  if (data.emergencyContact) formData.append("emergencyContact", data.emergencyContact);
-  formData.append("travelPurpose", data.travelPurpose);
-  formData.append("travelDate", data.travelDate.toISOString());
-  formData.append("travelDuration", data.travelDuration);
-  formData.append("visaType", data.visaType);
-  formData.append("destinationCountry", data.destinationCountry);
-  formData.append("employmentStatus", data.employmentStatus);
-  formData.append("employerName", data.employerName);
-  formData.append("jobTitle", data.jobTitle);
-  formData.append("workAddress", data.workAddress);
-  if (data.passportDocument) formData.append("passportDocument", data.passportDocument);
-  if (data.photoDocument) formData.append("photoDocument", data.photoDocument);
-  if (data.itineraryDocument) formData.append("itineraryDocument", data.itineraryDocument);
-  if (data.employmentLetter) formData.append("employmentLetter", data.employmentLetter);
-  if (data.otherDocuments && data.otherDocuments.length > 0) {
-    data.otherDocuments.forEach((file) => {
-      formData.append("otherDocuments", file); // Use single field name for multiple files
-    });
-  }
-
-  try {
-    console.log("Sending data to backend...");
-    const response = await fetch('https://flyinco.onrender.com/api/visas', {
-      method: 'POST',
-      body: formData,
-    });
-    console.log("Response status:", response.status);
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorText}`);
+    console.log("Form submission triggered", data);
+    const errors = form.formState.errors;
+    if (Object.keys(errors).length > 0) {
+      console.error("Validation errors:", errors);
+      toast({
+        title: "Validation Error",
+        description: "Please fill out all required fields correctly.",
+        variant: "destructive",
+      });
+      return;
     }
 
-    const result = await response.json();
-    console.log("Backend response:", result);
-    toast({
-      title: "Visa Application Submitted",
-      description: result.message || "Your application has been submitted successfully.",
-    });
-    form.reset();
-  } catch (error) {
-    console.error("Submission error:", error);
-    toast({
-      title: "Submission Failed",
-      description: error.message || "An error occurred while submitting the form.",
-      variant: "destructive",
-    });
+    const formData = new FormData();
+    formData.append("firstName", data.firstName);
+    formData.append("lastName", data.lastName);
+    formData.append("dateOfBirth", data.dateOfBirth.toISOString());
+    formData.append("gender", data.gender);
+    formData.append("nationality", data.nationality);
+    formData.append("maritalStatus", data.maritalStatus);
+    formData.append("passportNumber", data.passportNumber);
+    formData.append("passportIssuedAt", data.passportIssuedAt);
+    formData.append("passportIssuedOn", data.passportIssuedOn.toISOString());
+    formData.append("passportExpiresOn", data.passportExpiresOn.toISOString());
+    if (data.residencyCountry) formData.append("residencyCountry", data.residencyCountry);
+    if (data.residencyCity) formData.append("residencyCity", data.residencyCity);
+    if (data.residencyAddress) formData.append("residencyAddress", data.residencyAddress);
+    if (data.residencyPostal) formData.append("residencyPostal", data.residencyPostal);
+    formData.append("email", data.email);
+    formData.append("phoneNumber", data.phoneNumber);
+    if (data.emergencyContact) formData.append("emergencyContact", data.emergencyContact);
+    formData.append("travelPurpose", data.travelPurpose);
+    formData.append("travelDate", data.travelDate.toISOString());
+    formData.append("travelDuration", data.travelDuration);
+    formData.append("visaType", data.visaType);
+    formData.append("destinationCountry", data.destinationCountry);
+    formData.append("employmentStatus", data.employmentStatus);
+    if (data.employerName) formData.append("employerName", data.employerName);
+    if (data.jobTitle) formData.append("jobTitle", data.jobTitle);
+    formData.append("workAddress", data.workAddress);
+    if (data.passportDocument) formData.append("passportDocument", data.passportDocument);
+    if (data.photoDocument) formData.append("photoDocument", data.photoDocument);
+    if (data.itineraryDocument) formData.append("itineraryDocument", data.itineraryDocument);
+    if (data.employmentLetter) formData.append("employmentLetter", data.employmentLetter);
+
+    try {
+      console.log("Sending data to backend...");
+      const response = await fetch('https://flyinco.onrender.com/api/visas', {
+        method: 'POST',
+        body: formData,
+      });
+      console.log("Response status:", response.status);
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`HTTP error! Status: ${response.status}, Message: ${errorText}`);
+      }
+
+      const result = await response.json();
+      console.log("Backend response:", result);
+      toast({
+        title: "Visa Application Submitted",
+        description: result.message || "Your application has been submitted successfully.",
+      });
+      form.reset();
+    } catch (error) {
+      console.error("Submission error:", error);
+      toast({
+        title: "Submission Failed",
+        description: error.message || "An error occurred while submitting the form.",
+        variant: "destructive",
+      });
+    }
   }
-}
 
   return (
     <Card className="w-full shadow-lg">
@@ -838,13 +817,6 @@ export default function VisaApplicationForm() {
                   name="itineraryDocument"
                   render={({ field }) => (
                     <FileUploadButton field={field} label="Travel Itinerary (Flight/Hotel Booking)" />
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="otherDocuments"
-                  render={({ field }) => (
-                    <FileUploadButton field={field} label="Other Documents (optional)" />
                   )}
                 />
               </CardContent>
