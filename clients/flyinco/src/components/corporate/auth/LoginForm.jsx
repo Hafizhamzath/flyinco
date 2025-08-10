@@ -44,6 +44,11 @@ export function LoginForm() {
     navigate("/");
   }
 
+  // Navigate to Admin page on button click
+  function goToAdmin() {
+    navigate("/admin");
+  }
+
   return (
     <Card className="shadow-2xl">
       <CardHeader className="text-center">
@@ -90,6 +95,18 @@ export function LoginForm() {
             </Button>
           </form>
         </Form>
+
+        {/* Admin button below the form */}
+        <div className="mt-4 text-center">
+          <button
+            onClick={goToAdmin}
+            className="text-sm text-white bg-gray-700 hover:bg-gray-800 rounded px-3 py-1"
+            type="button"
+          >
+            Admin
+          </button>
+        </div>
+
         <div className="mt-6 text-center text-sm text-muted-foreground">
           Don't have an account?{" "}
           <a href="/signup" className="font-semibold text-primary hover:underline">
