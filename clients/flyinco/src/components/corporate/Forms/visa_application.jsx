@@ -131,7 +131,6 @@ export default function VisaApplicationForm() {
     defaultValues: {},
   });
 
-
 async function onSubmit(data) {
   console.log("Form submission triggered", data);
 
@@ -197,14 +196,8 @@ async function onSubmit(data) {
     const result = await response.json();
     console.log("Backend response:", result);
 
-    toast.success("Your visa application has been successfully submitted and approved!", {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-    });
+    // ✅ Plain system alert for success
+    alert("Your visa application has been successfully submitted and approved!");
 
     form.reset({
       firstName: "",
@@ -251,6 +244,7 @@ async function onSubmit(data) {
     });
   }
 }
+
 
 
   return (
