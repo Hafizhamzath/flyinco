@@ -13,7 +13,7 @@ import {
   FormLabel,
   FormMessage,
 } from "../../UI/form";
-import { Input } from "../../UI/Input";
+import { Input } from "../../UI/input";
 import {
   Card,
   CardContent,

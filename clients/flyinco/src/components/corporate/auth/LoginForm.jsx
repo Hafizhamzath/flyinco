@@ -12,8 +12,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../UI/Form";
-import { Input } from "../../UI/Input";
+} from "../../UI/form";
+import { Input } from "../../UI/input";
 import {
   Card,
   CardContent,
