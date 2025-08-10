@@ -6,8 +6,8 @@ import { format } from "date-fns";
 import { CalendarIcon, Search } from "lucide-react";
 
 import { cn } from "@/lib/utils"; // Adjust this path if needed
-import { Button } from "@/components/ui/button";
-import  Calendar  from "@/components/ui/calendar";
+import { Button } from "../../UI/button";
+import  Calendar  from "../../UI/calendar";
 import {
   Form,
   FormControl,
@@ -15,21 +15,21 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from "../../UI/form";
+import { Input } from "../../UI/input";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from "../../UI/popover";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { toast } from "@/hooks/use-toast"; // Optional — adjust or remove if not needed
+} from "../../UI/select";
+import { toast } from "../../../hooks/use-toast"; // Optional — adjust or remove if not needed
 
 // Zod validation schema
 const carFormSchema = z.object({
