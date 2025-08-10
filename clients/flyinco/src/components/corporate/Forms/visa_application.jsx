@@ -191,10 +191,41 @@ export default function VisaApplicationForm() {
       const result = await response.json();
       console.log("Backend response:", result);
       toast({
-        title: "Visa Application Submitted",
-        description: result.message || "Your application has been submitted successfully.",
+        title: "Application Approved",
+        description: "Your visa application has been successfully submitted and approved.",
       });
-      form.reset();
+      form.reset({
+        firstName: "",
+        lastName: "",
+        dateOfBirth: undefined,
+        gender: "",
+        nationality: "",
+        maritalStatus: "",
+        passportNumber: "",
+        passportIssuedAt: "",
+        passportIssuedOn: undefined,
+        passportExpiresOn: undefined,
+        residencyCountry: "",
+        residencyCity: "",
+        residencyAddress: "",
+        residencyPostal: "",
+        email: "",
+        phoneNumber: "",
+        emergencyContact: "",
+        travelPurpose: "",
+        travelDate: undefined,
+        travelDuration: "",
+        visaType: "",
+        destinationCountry: "",
+        employmentStatus: "",
+        employerName: "",
+        jobTitle: "",
+        workAddress: "",
+        passportDocument: undefined,
+        photoDocument: undefined,
+        itineraryDocument: undefined,
+        employmentLetter: undefined,
+      });
     } catch (error) {
       console.error("Submission error:", error);
       toast({
