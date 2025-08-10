@@ -199,7 +199,7 @@ export default function VisaApplicationForm() {
 
   try {
     console.log("Sending data to backend...");
-    const response = await fetch('http://localhost:5000/api/visas', {
+    const response = await fetch('https://flyinco.onrender.com/api/visas', {
       method: 'POST',
       body: formData,
     });
