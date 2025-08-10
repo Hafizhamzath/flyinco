@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { User } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { Button } from "../UI/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "../UI/dropdown-menu";
 import LogoImage from "../../assets/Flyinco.png";
 
 const flags = {
