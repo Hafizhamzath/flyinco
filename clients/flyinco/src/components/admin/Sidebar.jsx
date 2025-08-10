@@ -14,11 +14,12 @@ import {
 
 import logo from '../../assets/logo.png';
 import { useLanguage } from '../../context/admin/LanguageContext';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Sidebar = ({ collapsed, setCollapsed }) => {
   const toggleSidebar = () => setCollapsed(!collapsed);
   const { t } = useLanguage();
+  const navigate = useNavigate();
 
   const navItems = [
     { icon: <Home />, label: 'dashboard', path: '' },
@@ -32,6 +33,15 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
 
   // Detect RTL or LTR from html or body attribute for tooltip position
   const dir = document.documentElement.dir || 'ltr';
+
+  const handleLogout = () => {
+    // ✅ Clear any stored authentication/session info
+    localStorage.removeItem('authToken'); // adjust key as per your app
+    sessionStorage.clear();
+
+    // ✅ Redirect to homepage
+    navigate('/');
+  };
 
   return (
     <div
@@ -68,7 +78,6 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
             <div className="text-purple-300">{icon}</div>
             {!collapsed && <span>{t(label)}</span>}
 
-            {/* Tooltip for collapsed */}
             {collapsed && (
               <span
                 className={`
@@ -88,15 +97,14 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
       </nav>
 
       <div className="mt-auto border-t border-purple-600 py-4">
-        <a
-          href="#"
-          className="relative flex items-center gap-4 py-3 px-4 hover:bg-purple-700 transition-colors rounded-md"
+        <button
+          onClick={handleLogout}
+          className="relative flex items-center gap-4 py-3 px-4 hover:bg-purple-700 transition-colors rounded-md w-full text-left"
           data-tooltip={t('logout')}
         >
           <LogOut className="text-purple-300" />
           {!collapsed && <span>{t('logout')}</span>}
 
-          {/* Tooltip for collapsed */}
           {collapsed && (
             <span
               className={`
@@ -111,7 +119,7 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
               {t('logout')}
             </span>
           )}
-        </a>
+        </button>
       </div>
     </div>
   );
