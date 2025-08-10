@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../styles/UI/Badge.css';
+// import '../../styles/UI/Badge.css';
 
 export const Badge = ({ children, variant = 'default', icon }) => {
   return (
