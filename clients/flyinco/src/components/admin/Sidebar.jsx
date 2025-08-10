@@ -31,15 +31,14 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
     { icon: <CalendarIcon />, label: 'calendar', path: 'calendar' },
   ];
 
-  // Detect RTL or LTR from html or body attribute for tooltip position
   const dir = document.documentElement.dir || 'ltr';
 
   const handleLogout = () => {
-    // ✅ Clear any stored authentication/session info
-    localStorage.removeItem('authToken'); // adjust key as per your app
+    // ✅ Clear authentication/session
+    localStorage.removeItem('authToken');
     sessionStorage.clear();
 
-    // ✅ Redirect to homepage
+    // ✅ Redirect to Home page (`/`)
     navigate('/');
   };
 
